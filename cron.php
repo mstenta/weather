@@ -1,0 +1,75 @@
+#!/usr/bin/php
+<?php
+
+// Settings
+$debug = TRUE;  // Debug mode (prints messages)
+$file_dir = '/home/mstenta/weather';  // Base directory to store downloaded/generated files in.
+$goes_feeds = array(  // Array of GOES feeds to download
+  'eaus' => array(
+    'wv' => 'http://www.ssd.noaa.gov/goes/east/eaus/img',
+  ),
+);
+
+// Load some helpful functions
+require_once 'includes/functions.inc';
+
+// Generate directories if necessary
+$images_dir = '/' . date('Y') . '/' . date('m') . '/images';
+$path = $file_dir . $images_dir;
+$dir_exists = is_dir($path);
+if (!$dir_exists) {
+  $dir_exists = mkdir($path, 0777, TRUE);
+}
+if ($dir_exists) {
+  
+  // Download the latest image
+  download_latest_image($goes_feeds, $path);
+  
+  // If it's the first day of the month, generate videos
+  if (date('j') != '1') {
+
+    foreach ($goes_feeds as $region => $types) {
+      foreach ($types as $type => $url) {
+
+        // Get the previous month and year
+        $previous = previous_month_year();
+
+        // Tack a 0 to the month if it's less than 10
+        if ($previous['month'] < 10) {
+          $month = '0' . $previous['month'];
+        } else {
+          $month = $previous['month'];
+        }
+
+        // Generate the video filename
+        $path = $file_dir . '/' . $previous['year'] . '/' . $month;
+        $filename = 'goes_' . $region . '_' . $type . '_' . $previous['year'] . $month . '.mp4';
+
+        // If a video hasn't already been generated...
+        if (!file_exists($path . '/' . $filename)) {
+
+          // Change the working directory
+          chdir($path);
+          
+          // Make a temporary directory
+          mkdir($path . '/temp');
+          
+          // Generate the video
+          exec('convert images/*.jpg temp/%05d.stitch.jpg');
+          exec('ffmpeg -r 10 -qscale 1 -i temp/%05d.stitch.jpg ' . $filename);
+          
+          // Delete the temporary directory
+          exec('rm -r temp');
+          
+          // Upload it to YouTube
+          
+        }
+      }
+    }
+  }
+}
+
+// Get the first and last days of the previous month and year
+// $day = month_days($previous['month'], $previous['year']);
+
+?>
