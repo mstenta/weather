@@ -61,7 +61,7 @@ if ($dir_exists) {
           
           // Generate the video
           exec('convert images/*.jpg temp/%05d.stitch.jpg');
-          exec('ffmpeg -r 10 -qscale 1 -i temp/%05d.stitch.jpg ' . $filename);
+          exec('ffmpeg -r 20 -qscale 10 -i temp/%05d.stitch.jpg ' . $filename);
           
           // Delete the temporary directory
           exec('rm -r temp');
@@ -70,7 +70,7 @@ if ($dir_exists) {
           chdir($cwd);
           
           // Upload it to YouTube
-          exec('python includes/youtube_upload.py --email=' . $email . ' --password=' . $password . ' --title="NOAA GOES Water Vapor - Eastern US ' . $previous['month'] . '/' . $previous['year'] . '" --description="NOAA geostationary satellite eastern US water vapor - ' . $previous['month'] . '/' . $previous['year'] . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $path . '/' . $filename);
+          exec('python includes/youtube_upload.py --email=' . $email . ' --password=' . $password . ' --title="NOAA GOES Water Vapor - Eastern US ' . $month . '/' . $previous['year'] . '" --description="NOAA geostationary satellite eastern US water vapor - ' . $month . '/' . $previous['year'] . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $path . '/' . $filename);
         }
       }
     }
