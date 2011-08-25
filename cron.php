@@ -9,6 +9,8 @@ $goes_feeds = array(  // Array of GOES feeds to download
     'wv' => 'http://www.ssd.noaa.gov/goes/east/eaus/img',
   ),
 );
+$email = 'weather@mstenta.net';
+$password = '72411EOQUZYtv11';
 
 // Load some helpful functions
 require_once 'includes/functions.inc';
@@ -47,7 +49,10 @@ if ($dir_exists) {
 
         // If a video hasn't already been generated...
         if (!file_exists($path . '/' . $filename)) {
-
+          
+          // Remember the current working directory
+          $cwd = getcwd();
+          
           // Change the working directory
           chdir($path);
           
@@ -61,8 +66,11 @@ if ($dir_exists) {
           // Delete the temporary directory
           exec('rm -r temp');
           
-          // Upload it to YouTube
+          // Change the working directory back
+          chdir($cwd);
           
+          // Upload it to YouTube
+          exec('python includes/youtube_upload.py --email=' . $email . ' --password=' . $password . ' --title="NOAA GOES Water Vapor - Eastern US ' . $previous['month'] . '/' . $previous['year'] . '" --description="NOAA geostationary satellite eastern US water vapor - ' . $previous['month'] . '/' . $previous['year'] . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $path . '/' . $filename);
         }
       }
     }
