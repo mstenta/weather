@@ -12,6 +12,9 @@ $goes_feeds = array(  // Array of GOES feeds to download
 $email = 'weather@mstenta.net';
 $password = '72411EOQUZYtv11';
 
+// Set the timezone to UTC
+date_default_timezone_set('UTC');
+
 // Load some helpful functions
 require_once 'includes/functions.inc';
 
@@ -28,7 +31,7 @@ if ($dir_exists) {
   download_latest_image($goes_feeds, $path);
   
   // If it's the first day of the month, generate videos
-  if (date('j') != '1') {
+  if (date('j') == '1') {
 
     foreach ($goes_feeds as $region => $types) {
       foreach ($types as $type => $url) {
@@ -79,8 +82,5 @@ if ($dir_exists) {
     }
   }
 }
-
-// Get the first and last days of the previous month and year
-// $day = month_days($previous['month'], $previous['year']);
 
 ?>
