@@ -62,8 +62,12 @@ if ($dir_exists) {
           // Make a temporary directory
           mkdir($path . '/temp');
           
-          // Generate the video
+          // Copy images to temporary folder with numbered filenames
           exec('x=1; for i in images/*jpg; do counter=$(printf %05d $x); cp "$i" temp/"$counter".jpg; x=$(($x+1)); done');
+          // Delete empty files
+          //exec($cwd . '/includes/delete.sh');
+
+          // Use ffmpeg to generate the video
           exec('ffmpeg -r 20 -qscale 10 -i temp/%05d.jpg ' . $filename);
           
           // Delete the temporary directory
@@ -73,10 +77,10 @@ if ($dir_exists) {
           chdir($cwd);
           
           // Get the month name
-          $month_name = date(strtotime($previous['month'] . '/1/' . $previous['year']));
+          $month_name = date('F', strtotime($previous['month'] . '/1/' . $previous['year']));
           
           // Upload it to YouTube
-          exec('python includes/youtube_upload.py --email=' . $email . ' --password=' . $password . ' --title="' . $month_name . ' ' . $previous['year'] . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month_name . '/' . $previous['year'] . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $path . '/' . $filename);
+          exec('python includes/youtube_upload.py --email=' . $email . ' --password=' . $password . ' --title="' . $month_name . ' ' . $previous['year'] . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month_name . ' ' . $previous['year'] . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $path . '/' . $filename);
         }
       }
     }
