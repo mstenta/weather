@@ -40,10 +40,12 @@ function download_latest_image($feeds, $path) {
       $image_url = $url . '/' . $filename . $type . '.jpg';
 
       // Download the file
-      $file = file_get_contents($image_url);
       $local_path = $path . '/' . $filename . $type . '.jpg';
       if (!file_exists($local_path)) {
-        file_put_contents($local_path, $file);
+        $file = file_get_contents($image_url);
+        if (!empty($file)) {
+          file_put_contents($local_path, $file);
+        }
       }
     }
   }
