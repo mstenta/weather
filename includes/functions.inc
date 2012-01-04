@@ -16,10 +16,15 @@ function download_latest_image($feeds, $path) {
     $now_h = 23;
   }
 
-  // Tack on a leading zero if necessary
-  if ($now_h < 10) {
-   $now_h = '0'.$now_h;
+  // Tack on leading zeros to the day and hour, if necessary (the filename format uses a 3-digit day number, and a 2-digit hour number)
+  while (strlen($now_z) < 3) {
+    $now_z = '0' . $now_z;
   }
+  while (strlen($now_h) < 2) {
+    $now_h = '0' . $now_h;
+  }
+
+  // Start the filename
   $filename = gmdate('Y'.($now_z).'_'.$now_h);
 
   // The noaa images are taken at 15 and 45 past, so...
