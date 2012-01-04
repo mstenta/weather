@@ -3,7 +3,7 @@
 
 // Settings
 $debug = TRUE;  // Debug mode (prints messages)
-$file_dir = '/home/mstenta/weather';  // Base directory to store downloaded/generated files in.
+$file_dir = '/home/mstenta/weather/content';  // Base directory to store downloaded/generated files in.
 $goes_feeds = array(  // Array of GOES feeds to download
   'eaus' => array(
     'wv' => 'http://www.ssd.noaa.gov/goes/east/eaus/img',
