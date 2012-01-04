@@ -66,14 +66,18 @@ if ($dir_exists) {
           // Delete the temporary directory
           exec('rm -r temp');
           
-          // Change the working directory back
-          chdir($cwd);
-          
-          // Get the month name
-          $month_name = date('F', strtotime($previous['month'] . '/1/' . $previous['year']));
-          
-          // Upload it to YouTube
-          exec('python lib/youtube_upload.py --email=' . $email . ' --password=' . $password . ' --title="' . $month_name . ' ' . $previous['year'] . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month_name . ' ' . $previous['year'] . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $path . '/' . $filename);
+          // Upload it to Youtube
+          if ($youtube_upload) {
+            
+            // Change the working directory back
+            chdir($cwd);
+
+            // Get the month name
+            $month_name = date('F', strtotime($previous['month'] . '/1/' . $previous['year']));
+
+            // Upload it to YouTube
+            exec('python lib/youtube_upload.py --email=' . $youtube_email . ' --password=' . $youtube_password . ' --title="' . $month_name . ' ' . $previous['year'] . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month_name . ' ' . $previous['year'] . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $path . '/' . $filename);
+          }
         }
       }
     }
