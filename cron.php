@@ -78,7 +78,7 @@ if ($dir_exists) {
           $month_name = date('F', strtotime($previous['month'] . '/1/' . $previous['year']));
           
           // Upload it to YouTube
-          exec('python includes/youtube_upload.py --email=' . $email . ' --password=' . $password . ' --title="' . $month_name . ' ' . $previous['year'] . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month_name . ' ' . $previous['year'] . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $path . '/' . $filename);
+          exec('python lib/youtube_upload.py --email=' . $email . ' --password=' . $password . ' --title="' . $month_name . ' ' . $previous['year'] . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month_name . ' ' . $previous['year'] . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $path . '/' . $filename);
         }
       }
     }
