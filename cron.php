@@ -1,22 +1,17 @@
 #!/usr/bin/php
 <?php
 
-// Settings
-$debug = TRUE;  // Debug mode (prints messages)
-$file_dir = '/home/mstenta/weather/content';  // Base directory to store downloaded/generated files in.
-$goes_feeds = array(  // Array of GOES feeds to download
-  'eaus' => array(
-    'wv' => 'http://www.ssd.noaa.gov/goes/east/eaus/img',
-  ),
-);
-$email = 'weather@mstenta.net';
-$password = '72411EOQUZYtv11';
+// Load settings
+require_once 'settings.php';
 
-// Set the timezone to UTC
-date_default_timezone_set('UTC');
+// Load list of NOAA GOES feeds
+require_once 'includes/feeds.inc';
 
 // Load some helpful functions
 require_once 'includes/functions.inc';
+
+// Set the timezone to UTC
+date_default_timezone_set('UTC');
 
 // Generate directories if necessary
 $images_dir = '/' . date('Y') . '/' . date('m') . '/images';
