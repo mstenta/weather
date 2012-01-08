@@ -1,10 +1,22 @@
 <?php
 
-// Settings
-$debug = FALSE;  // Debug mode (prints messages)
-$file_dir = '/[path]/content';  // Absolute path to the content folder for storing images.
-
-// Youtube upload settings
-$youtube_upload = TRUE;  // Enable/disable Youtube upload
-$youtube_email = '';  // Youtube login email address
-$youtube_password = '';  // Youtube login password
+// Settings array
+$weather_settings = array(
+  
+  'debug' => FALSE,  // Debug mode (prints messages)
+  'content' => '/[root]/content',  // Base directory to store downloaded/generated files in.
+  
+  // Youtube upload settings.
+  'youtube' => array(
+    'upload' => TRUE,  // Enable/disable Youtube upload
+    'email' => '',  // Youtube login email address
+    'password' => '',  // Youtube login password
+  ),
+  
+  // Array of NOAA GOES image feeds to download.
+  'goes_feeds' => array(
+    'eaus' => array(
+      'wv' => 'http://www.ssd.noaa.gov/goes/east/eaus/img',
+    ),
+  ),
+);
