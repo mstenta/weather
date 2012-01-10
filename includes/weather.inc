@@ -228,7 +228,7 @@ class weather_video extends weather {
     $last_year = gmdate('Y', $this->timestamp);
     
     // Store the previous month as a timestamp on the video object for other functions to use (like this::upload()).
-    $this->previous_month = strtotime($last_month . '/' . $last_year);
+    $this->previous_month = strtotime($last_month . '/1/' . $last_year);
     
     // If the previous month was zero, then it was December of the year before
     if ($last_month == 0) {
@@ -248,8 +248,8 @@ class weather_video extends weather {
      * To do this, we'll need to change the way that image files are stored, so that they are in region and type subfolders. Either that, or change the way the 
      * code below works so that it can isolate only the appropriate files in the month directory and copy them to the temp directory.
      */
-    $path = $this->settings['content'] . '/' . $last_year . '/' . $last_month;
-    $filename = 'goes_eaus_wv_' . $last_year . $last_month . '.mp4';
+    $this->path = $this->settings['content'] . '/' . $last_year . '/' . $last_month;
+    $this->filename = 'goes_eaus_wv_' . $last_year . $last_month . '.mp4';
 
     // If a video hasn't already been generated...
     if (!file_exists($this->path . '/' . $this->filename)) {
@@ -283,7 +283,12 @@ class weather_video extends weather {
     $month = date('F', $this->previous_month);
     $year = date('Y', $this->previous_month);
 
+    $command = 'python lib/youtube_upload.py --email=' . $this->settings['youtube']['email'] . ' --password=' . $this->settings['youtube']['password'] . ' --title="' . $month . ' ' . $year . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month . ' ' . $year . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $this->path . '/' . $this->filename;
+
+    // Log the command so that it can be manually executed later if this doesn't work
+    file_put_contents($this->settings['log'] . '/' . $year . $month . '.log', $command);
+
     // Upload it to YouTube
-    exec('python lib/youtube_upload.py --email=' . $this->settings['youtube']['email'] . ' --password=' . $this->settings['youtube']['password'] . ' --title="' . $month . ' ' . $year . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month . ' ' . $year . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $this->path . '/' . $this->filename);
+    exec($command);
   }
 }
