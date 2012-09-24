@@ -106,7 +106,7 @@ class weather_snapshot extends weather {
   /**
    * Formats a date based on a timestamp for use in a filename.
    *
-   * Filename format example: 2011112_1345wv.jpg (YYYYddd_HHmm[type].jpg)
+   * Filename format example: 2011112_1330wv.jpg (YYYYddd_HHmm[type].jpg)
    *
    * @param $timestamp
    *   The timestamp to use.
@@ -157,9 +157,9 @@ class weather_snapshot extends weather {
     // If the minute is between 0 and 30, set it to 15
     // Otherwise set it to 45.
     if ($minute >= 0 && $minute < 30) {
-      $minute = '15';
+      $minute = '00';
     } else {
-      $minute = '45';
+      $minute = '30';
     }
 
     // Return the formatted string in an array with the year and month
