@@ -20,7 +20,7 @@ class weather_snapshot extends weather {
   }
 
   /**
-   * Download the image.
+   * Download the images.
    */
   public function download() {
 
@@ -32,9 +32,9 @@ class weather_snapshot extends weather {
             if (!empty($images)) {
 
               // Generate directory if it doesn't exist.
-              $destination = $this->settings['content'] . '/' . $year . '/' . $month . '/images';
-              if (!is_dir($destination)) {
-                $destination = mkdir($destination, 0777, TRUE);
+              $destination = $this->settings['content'] . '/' . $year . '/' . $month;
+              if (!is_dir($destination . '/img')) {
+                mkdir($destination . '/img', 0777, TRUE);
               }
 
               // Download each of the images.
@@ -63,12 +63,15 @@ class weather_snapshot extends weather {
   }
   
   /**
-   * Generates images.
+   * Generates an array of images to be downloaded.
    *
    * @return
    *   Returns an array of images.
    */
   private function generate_images() {
+
+    // Generate date information from the stored timestamp.
+    $date_info = $this->format_date($this->timestamp);
 
     // If the image doesn't have any filenames, generate them.
     if (empty($this->images)) {
@@ -82,17 +85,53 @@ class weather_snapshot extends weather {
           // If there is a region...
           if (!empty($region)) {
 
-            // Loop through it to get the type and url...
-            foreach ($region as $type => $url) {
+            // Get the base URL.
+            $url = $region['url'];
 
-              // Get the filename string, along with the year and month folders to sort it into
-              $date_info = $this->format_date($this->timestamp);
+            // Loop through the types that should be downloaded.
+            foreach ($region['types'] as $type) {
 
-              // Generate a full URL and add it to the list.
-              $this->images[$date_info['year']][$date_info['month']][] = array(
-                'url' => $url,
-                'filename' => $date_info['string'] . $type . '.jpg',
-              );
+              // Fetch the text file containing the filenames from the NOAA server.
+              $txtfile = file_get_contents($url . '/txtfiles/' . $type . '_names.txt');
+
+              // If the text file was loaded successfully, parse it.
+              if (!empty($txtfile)) {
+
+                // Iterate over each line.
+                foreach (preg_split('/((\r?\n)|(\r\n?))/', $txtfile) as $line) {
+
+                  // Find the image name, ie:
+                  // img/2012268_1745wv.jpg
+                  $matches = array();
+                  preg_match('/^(img\/[0-9_]*' . $type . '\.jpg)\s*/', $line, $matches);
+
+                  // If an image name was found, add it to the list of images.
+                  if (!empty($matches[1])) {
+
+                    // Set the filename.
+                    $filename = $matches[1];
+
+                    // Add an image element to the array of images for download, along with the year and month folders to sort it into.
+                    $this->images[$date_info['year']][$date_info['month']][] = array(
+                      'url' => $url,
+                      'filename' => $filename,
+                    );
+                  }
+                }
+              }
+
+              // If the text file wasn't loaded successfully, guess at the filename based on the date.
+              else {
+
+                // Generate a filename string using the date.
+                $filename = 'img/' . $date_info['string'] . $type . '.jpg';
+
+                // Add an image element to the array of images for download, along with the year and month folders to sort it into.
+                $this->images[$date_info['year']][$date_info['month']][] = array(
+                  'url' => $url,
+                  'filename' => $filename,
+                );
+              }
             }
           }
         }

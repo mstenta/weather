@@ -17,7 +17,8 @@ $weather_settings = array(
   // Array of NOAA GOES image feeds to download.
   'goes_feeds' => array(
     'eaus' => array(
-      'wv' => 'http://www.ssd.noaa.gov/goes/east/eaus/img',
+      'url' => 'http://www.ssd.noaa.gov/goes/east/eaus',
+      'types' => array('wv'),
     ),
   ),
 );
