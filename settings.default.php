@@ -4,8 +4,9 @@
 $weather_settings = array(
 
   'debug' => FALSE,  // Debug mode (prints messages)
-  'content' => '/[root]/content',  // Base directory to store downloaded/generated files in.
-  'log' => '/[root]/content/log',  // Directory to store logs in
+  'script' => '/[root]/weather',  // Base directory of the script.
+  'content' => '/[root]/weather/content',  // Base directory to store downloaded/generated files in.
+  'log' => '/[root]/weather/content/log',  // Directory to store logs in
 
   // Youtube upload settings.
   'youtube' => array(

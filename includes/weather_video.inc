@@ -79,11 +79,14 @@ class weather_video extends weather {
 
   public function upload() {
 
+    // Get the path of the running script.
+    $script = $this->settings['script'];
+
     // Get the month and year.
     $month = date('F', $this->previous_month);
     $year = date('Y', $this->previous_month);
 
-    $command = 'python lib/youtube_upload.py --email=' . $this->settings['youtube']['email'] . ' --password=' . $this->settings['youtube']['password'] . ' --title="' . $month . ' ' . $year . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month . ' ' . $year . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $this->path . '/' . $this->filename;
+    $command = 'python ' . $script . '/lib/youtube_upload.py --email=' . $this->settings['youtube']['email'] . ' --password=' . $this->settings['youtube']['password'] . ' --title="' . $month . ' ' . $year . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month . ' ' . $year . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $this->path . '/' . $this->filename;
 
     // Log the command so that it can be manually executed later if this doesn't work
     file_put_contents($this->settings['log'] . '/' . $year . $month . '.log', $command);
