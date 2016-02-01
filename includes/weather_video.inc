@@ -67,7 +67,7 @@ class weather_video extends weather {
       exec('x=1; for i in img/*jpg; do counter=$(printf %05d $x); cp "$i" temp/"$counter".jpg; x=$(($x+1)); done');
 
       // Use ffmpeg to generate the video
-      exec('ffmpeg -r 20 -qscale 10 -i temp/%05d.jpg ' . $this->filename);
+      exec('ffmpeg -r 20 -i temp/%05d.jpg ' . $this->filename);
 
       // Delete the temporary directory
       exec('rm -r temp');
