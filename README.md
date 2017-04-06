@@ -29,11 +29,10 @@ YouTube Upload
 
 To upload videos, add your YouTube login credentials to setting.php and set `$weather_settings['youtube']['upload']` to `TRUE`.
 
-Videos are uploaded to YouTube via the 'youtube-upload' script (included).
-More info: http://code.google.com/p/youtube-upload/
+Videos are uploaded to YouTube via the 'youtube-upload' python script. See https://github.com/tokland/youtube-upload for installation instructions.
 
 The dependencies for that script can be installed (on Ubuntu) with the following command:
 
-    sudo apt-get install python-gdata imagemagick ffmpeg
+    sudo apt-get install python-pip python-gdata imagemagick ffmpeg
 
 Sometimes the YouTube upload fails, so as a backup the script will write the upload command to a log file, which can be run manually from the root of the script's directory.

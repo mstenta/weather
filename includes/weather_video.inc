@@ -79,6 +79,11 @@ class weather_video extends weather {
 
   public function upload() {
 
+    // If the "uploaded" file already exists, we have already uploaded the video, so don't do anything.
+    if (file_exists($this->path . '/uploaded')) {
+      return;
+    }
+
     // Get the path of the running script.
     $script = $this->settings['script'];
 
@@ -86,12 +91,15 @@ class weather_video extends weather {
     $month = date('F', $this->previous_month);
     $year = date('Y', $this->previous_month);
 
-    $command = 'python ' . $script . '/lib/youtube_upload.py --email=' . $this->settings['youtube']['email'] . ' --password=' . $this->settings['youtube']['password'] . ' --title="' . $month . ' ' . $year . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month . ' ' . $year . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $this->path . '/' . $this->filename;
+    $command = 'youtube-upload --email=' . $this->settings['youtube']['email'] . ' --password=' . $this->settings['youtube']['password'] . ' --title="' . $month . ' ' . $year . ' Water Vapor - Eastern US - NOAA GOES" --description="NOAA geostationary satellite eastern US water vapor - ' . $month . ' ' . $year . '" --category=Education --keywords="NOAA, GOES, Water Vapor" ' . $this->path . '/' . $this->filename;
 
     // Log the command so that it can be manually executed later if this doesn't work
     file_put_contents($this->settings['log'] . '/' . $year . $month . '.log', $command);
 
     // Upload it to YouTube
     exec($command);
+
+    // Touch the "uploaded" file so we know not to upload it again.
+    exec('touch ' . $this->path . '/uploaded');
   }
 }
